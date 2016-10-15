@@ -16,7 +16,6 @@ export default(state=[],action={}) => {
           text:action.message.text
         }
       ]
-
     case DELETE_FLASH_MESSAGE:
       const index = findIndex(state,{id:action.id});
       if(index >= 0){
@@ -26,7 +25,6 @@ export default(state=[],action={}) => {
         ]
       }
       return state;
-
     default:
       return state;
   }

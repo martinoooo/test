@@ -13,9 +13,10 @@ let router = express.Router();
 function validateInput(data,otherValidations){
 	let { errors } = otherValidations(data);
 
+	//use promise
 	return Promise.all([
 		User.where({email:data.email}).fetch().then(user => {
-			if(user){errors.email = 'There is user with such eamil';}
+			if(user){errors.email = 'There is user with such email';}
 		}),
 		User.where({username:data.username}).fetch().then(user => {
 			if(user){errors.username = 'There is user with such username';}
@@ -28,6 +29,17 @@ function validateInput(data,otherValidations){
 	})
 	
 }
+
+router.get('/:indentifier',(req,res) => {
+	//do not use promise
+	User.query({
+		select:['username','email'],
+		where:{email:req.params.indentifier},
+		orWhere:{username:req.params.indentifier}
+	}).fetch().then(user => {
+		res.json({ user });
+	})
+})
 
 router.post('/',(req,res) => {
 

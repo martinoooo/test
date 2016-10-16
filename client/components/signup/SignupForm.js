@@ -18,12 +18,14 @@ class SignupForm extends React.Component {
       password:'',
       passwordConfirmation:'',
       timezone:'',
-      errors:'',
-      isLoading:false
+      errors:{},
+      isLoading:false,
+      invalid:false
     };
 
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+    this.checkUserExists = this.checkUserExists.bind(this)
   }
   onChange(e){
     this.setState({[e.target.name]:e.target.value})
@@ -54,6 +56,24 @@ class SignupForm extends React.Component {
       )
     }
   }
+  checkUserExists(e){
+    const field = e.target.name;
+    const val = e.target.value;
+    if ( val !== ''){
+      this.props.isUserExists(val).then(res => {
+        let errors = this.state.errors;
+        let invalid;
+        if(res.data.user){
+          errors[field] = 'There is user with such ' + field;
+          invalid = true;
+        }else{
+          errors[field] = '';
+          invalid = false;
+        }
+        this.setState({ errors,invalid})
+      })
+    }
+  }
   render(){ 
     const  options = map(timezones,(val,key) =>
       <option key={val} value={val}>{key}</option>
@@ -70,6 +90,7 @@ class SignupForm extends React.Component {
           type="text"
           value={this.state.username}
           field="username"
+          checkUserExists={this.checkUserExists}
         />
 
         <TextFieldGruop
@@ -98,6 +119,7 @@ class SignupForm extends React.Component {
           type="text"
           value={this.state.email}
           field="email"
+          checkUserExists={this.checkUserExists}
         />
 
         <div className="form-gruop" >
@@ -115,7 +137,7 @@ class SignupForm extends React.Component {
 
 
         <div className="from-group">
-          <button disabled={this.state.isLoading} className="btn btn-primary btn-lg">
+          <button disabled={this.state.isLoading || this.state.invalid} className="btn btn-primary btn-lg">
             Sign up
           </button>
         </div>
@@ -126,7 +148,8 @@ class SignupForm extends React.Component {
 
 SignupForm.protoTypes = {
   userSignupRequest:React.PropTypes.func.isRequired,
-  addFlashMessage:React.PropTypes.func.isRequired
+  addFlashMessage:React.PropTypes.func.isRequired,
+  isUserExists:React.PropTypes.func.isRequired
 }
 
 export default SignupForm

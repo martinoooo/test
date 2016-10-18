@@ -37,8 +37,8 @@ export default {
   resole:{
     extensions:['','.js',],
   },
-  node:{
+/*  node:{
     net:'empty',
     dns:'empty'
-  }
+  }*/
 }

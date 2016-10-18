@@ -9,16 +9,16 @@ class TextFieldGruop  extends React.Component{
     const {error,value,onChange,type,field,label,checkUserExists} = this.props;
     return (
       <div className={classnames("form-gruop",{"has-error":error})} >
-      <label className="control-label">{label}</label>
-      <input
-        value={value}
-        onChange={onChange}
-        onBlur={checkUserExists}
-        type={type}
-        name={field}
-        className="form-control"
-      />
-      {error && <span className="help-block">{error}</span>}
+        <label className="control-label">{label}</label>
+        <input
+          value={value}
+          onChange={onChange}
+          onBlur={checkUserExists}
+          type={type}
+          name={field}
+          className="form-control"
+        />
+        {error && <span className="help-block">{error}</span>}
       </div>
     )
   }
